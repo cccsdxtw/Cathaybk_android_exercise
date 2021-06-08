@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.cathaybk_android_exercise.Controller.Adapter.UsersListAdapter
 import com.example.cathaybk_android_exercise.R
 import com.example.githubusers.Model.Data.Users
 
@@ -46,10 +47,20 @@ class MainActivity : AppCompatActivity() {
                 val users: Array<Users.Response> = Gson().fromJson(responseStr, Array<Users.Response>::class.java)
                 Log.d("GetAllUserForAPI::", "users:" + users)
                 Log.d("GetAllUserForAPI::", "users:" + users[1].login)
+                changeList(itemViewer,users)
             }
         })
 
 
+    }
+    private fun changeList(name: ListView, itemList: Array<Users.Response>) {
+        runOnUiThread {
+            // Stuff that updates the UI
+            val mListAdapter: UsersListAdapter = UsersListAdapter()
+            mListAdapter.UsersListAdapter(this, this, itemList)
+            name.setAdapter(mListAdapter)
+            mListAdapter.notifyDataSetChanged()
+        }
     }
 
 }
