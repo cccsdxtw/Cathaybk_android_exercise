@@ -4,6 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cathaybk_android_exercise.Controller.Adapter.UsersListAdapter
@@ -18,13 +21,65 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
 
     lateinit var itemViewer: ListView
-    var TAG: String ="MainActivity"
+    lateinit var LinearLayout: LinearLayout
+
+    var TAG: String = "MainActivity"
     var scrollFlag = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         itemViewer = findViewById(R.id.itemViewer)
+        LinearLayout = findViewById(R.id.LinearLayout)
         getAllUserForAPI()
+
+        var newVisibleItem: Int = 0
+        var firsX: Float = 0.0F
+        var oldX: Float = 0.0F
+
+//        itemViewer.isEnabled = false
+
+
+        itemViewer.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent): Boolean {
+                Log.d("event.action::", "event.action" + event.action)
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        Log.d(TAG, "ACTION_DOWN")
+                        oldX = event.y
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        if (oldX == 0.0F) {
+                            oldX = event.y
+                        }
+                        return true
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        firsX = event.y
+                        Log.d(TAG, "oldX" + oldX + "|||firsX" + firsX+"|||newVisibleItem"+newVisibleItem)
+                        if (oldX > firsX && oldX - firsX > 5.0F && newVisibleItem + 5 < itemViewer.getCount()) {
+                            // 向上滑动
+                            newVisibleItem = newVisibleItem + 5
+                            itemViewer.setSelection(newVisibleItem)
+
+                        }
+                        if (oldX < firsX && firsX - oldX > 5.0F &&newVisibleItem - 5 >= 0) {
+                            // 向下滑动
+                            newVisibleItem = newVisibleItem - 5
+                            itemViewer.setSelection(newVisibleItem)
+
+
+                        }
+                        oldX = 0.0F
+                    }
+
+                    else -> {
+                        return false
+                    }
+
+                }
+                return false
+            }
+        })
 
     }
 
@@ -60,6 +115,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
     private fun changeList(name: ListView, itemList: Array<Users.Response>) {
         runOnUiThread {
             // Stuff that updates the UI
@@ -69,7 +125,6 @@ class MainActivity : AppCompatActivity() {
             mListAdapter.notifyDataSetChanged()
         }
     }
-
 
 
 }
