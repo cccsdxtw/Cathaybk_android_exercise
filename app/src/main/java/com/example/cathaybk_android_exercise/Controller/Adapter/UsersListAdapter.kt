@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.cathaybk_android_exercise.Controller.Activity.OneUserActivity
 import com.example.cathaybk_android_exercise.R
 import com.example.githubusers.Model.Data.Users
 import com.example.githubusers.Model.Uill.CircleTransform
@@ -72,6 +73,12 @@ class UsersListAdapter() : BaseAdapter() {
 
             val example = View.OnClickListener {
                 // 寫要做的事...
+                val intent = Intent()
+                intent.setClass(mContext!!, OneUserActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString("ID",mAllUser[position].login)
+                intent.putExtras(bundle)
+                mContext!!.startActivity(intent)
 
             }
             view.setOnClickListener(example)
