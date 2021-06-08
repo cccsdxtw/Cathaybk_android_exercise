@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.cathaybk_android_exercise.R
 import com.example.githubusers.Model.Data.Users
+import com.example.githubusers.Model.Uill.CircleTransform
 import com.squareup.picasso.Picasso
 
 
@@ -64,6 +65,7 @@ class UsersListAdapter() : BaseAdapter() {
 
             Picasso.get()
                 .load(mAllUser[position].avatar_url)
+                .transform(CircleTransform())
                 .placeholder(R.drawable.refresh)
                 .error(R.drawable.xx)
                 .into(imgView)
