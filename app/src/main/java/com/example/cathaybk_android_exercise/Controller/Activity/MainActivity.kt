@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cathaybk_android_exercise.R
+import com.example.githubusers.Model.Data.Users
 
 import com.google.gson.Gson
 import okhttp3.*
@@ -41,12 +42,14 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call?, response: Response?) {
                 //處理回來的 Response
                 val responseStr = response!!.body()!!.string()
-                Log.d(TAG,"API取得數據="+responseStr);
-
-
+//                Log.d(TAG,"API取得數據="+responseStr);
+                val users: Array<Users.Response> = Gson().fromJson(responseStr, Array<Users.Response>::class.java)
+                Log.d("GetAllUserForAPI::", "users:" + users)
+                Log.d("GetAllUserForAPI::", "users:" + users[1].login)
             }
         })
-    }
 
+
+    }
 
 }
